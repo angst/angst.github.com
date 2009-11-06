@@ -1,0 +1,51 @@
+---
+layout: post
+title: Making Bloglio
+byline: Jake Dahn
+---
+
+"Bloglio":http://bloglio.heroku.com started as a day dream during my 'dynamic web applications' class. As everyone was learning about wordpress I was off in happyland thinking about setting up my new blog, and thinking up new ways on how I could force myself to continue blogging on a regular basis. During this daydream I remembered a conversation I had with jesse a few weeks before regarding doing something with "Twilio":http://twilio.com (basically a phone service with full rest api).
+
+Then in what seemed like a blink of an eye I convinced myself that voice blogging was genius, and it had to be done... right away! I spent the day conversing with people and asking around on twitter; trying to figure out who would use a voice blogging application, and who showed even the slightest interest.
+
+After receiving a bit of interest and talking to Jesse about the idea – it was time to move forward and actually make some sort of working prototype. So over the course of a highly caffeinated night of reading and learning I mustered up a basic working prototype of the voice blogging app, dubbed Bloglio. Luckily I had actually been building a blog backend using the Sinatra framework for my personal blog just the weekend before. Because I had a very basic blog backend written from my personal blogging adventures, I was able to hit the ground running with Twilio.
+
+I actually tried using a few different libraries to interact with the twilio api, but I wasn't really having luck with the first few. I eventually settled on the "webficient gem":http://github.com/webficient/twilio. The readme made things look pretty simple so after a bit of poking around I managed to create a working prototype with less than 20 lines of code (minus the 5 line authentication required). Below is the entire functionality/interaction with the twilio api which enables the application functionality.
+
+{% highlight ruby %}
+
+post "/handle_call" do
+  verb = Twilio::Verb.new { |v|
+    v.say("Please record your blog post after the beep.")
+    v.pause(:length => 1)
+    v.record(:transcribe => true, :transcribeCallback => '/handle_transcribe')
+    v.hangup
+  }    
+  verb.response
+end
+
+post "/handle_transcribe" do
+  entry = Entry.new
+
+  entry.title = "New voice blog from #{Time.now}"
+  entry.body  = params[:TranscriptionText] 
+  entry.recording_url = params[:RecordingUrl]
+
+  entry.save
+end
+
+{% endhighlight %}
+
+
+h3. Say wha?
+
+Granted being happy about finally making a prototype, I had to face the reality that voice transcription (at least from twilio) sucks. I've had at least ten different people give it a whirl, and none of the transcriptions have turned out accurate. I'm really not sure how voice transcription works, it seems like a complex system, but I hope that with time things get better. Cheap and open technology on the telephony front are what makes fun projects like this possible.
+
+Bloglio will remain active until the development credit for my account is gone. 
+
+
+h3. Go Play!
+
+If you're curious to see how things work, feel free to give it a try. Head over to "Bloglio":http://bloglio.heroku.com and just click the 'call me' button in the header, then enter your phone number into the form. You should receive a phone call in seconds, after recording your blog post it will appear within a few minutes on the front page.
+
+I haven't had the time to explore other services, but I really like the way twilio works and the community that has sprung up around it. So if this post piqued any interest, I encourage you to head over "Twilio":http://twilio.com and start making something cool.
