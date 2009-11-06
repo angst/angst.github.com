@@ -9,14 +9,6 @@ layout: nil
  <link href="http://ang.st/"/>
  <updated>{{ site.time | date_to_xmlschema }}</updated>
  <id>http://ang.st/</id>
- <author>
-   <name>Jesse Andrews</name>
-   <email>jesse@ang.st</email>
- </author>
- <author>
-   <name>Jake Dahn</name>
-   <email>jake@ang.st</email>
- </author>
 
  {% for post in site.posts %}
  <entry>
@@ -25,6 +17,9 @@ layout: nil
    <updated>{{ post.date | date_to_xmlschema }}</updated>
    <id>http://ang.st/{{ post.id }}</id>
    <content type="html">{{ post.content | xml_escape }}</content>
+   <author>
+     <name>{{ post.byline }}</name>
+   </author>
  </entry>
  {% endfor %}
  
