@@ -1,0 +1,38 @@
+---
+layout: post
+title: Test Post Title
+byline: Jake Dahn
+---
+{% highlight ruby %}
+
+post "/handle_call" do
+      verb = Twilio::Verb.new { |v|
+        v.say("Please record your blog post after the beep.")
+        v.pause(:length => 1)
+        v.record(:transcribe => true, :transcribeCallback => '/handle_transcribe')
+        v.hangup
+      }    
+      verb.response
+    end
+ 
+    post "/handle_transcribe" do
+    
+      entry = Entry.new
+ 
+      entry.title = "New voice blog from #{Time.now}"
+      entry.body  = params[:TranscriptionText] 
+      entry.recording_url = params[:RecordingUrl]
+ 
+      entry.save
+    end
+  {% endhighlight %}
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec venenatis, libero ac auctor laoreet, nunc dolor volutpat purus, sit amet posuere turpis diam sit amet tellus. Praesent nec pede. Quisque dolor. Nam volutpat libero at sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Donec hendrerit lectus ut mauris. Fusce a dui. Mauris quis metus eu urna sodales iaculis. Vestibulum non erat vitae turpis ultricies lacinia. Curabitur nunc. Duis vestibulum orci nec enim. Maecenas dapibus, urna a lacinia volutpat, ligula massa lobortis risus, non scelerisque diam sapien nec enim. Ut a nibh. Etiam laoreet ipsum ac ante. Aliquam bibendum cursus nibh.
+
+Vivamus vitae dolor. Morbi lacinia. Nulla commodo orci nec odio. Nam mattis commodo neque. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam ligula. Aenean eleifend. Praesent auctor diam. Nulla tortor velit, sagittis nec, dignissim non, mattis a, lorem. Vestibulum nec quam at tellus scelerisque condimentum. Pellentesque tortor neque, iaculis a, ultrices feugiat, mattis sed, mauris. Praesent pellentesque, sem id malesuada convallis, turpis sem sagittis velit, vel condimentum dui quam nec nisl. Curabitur vitae velit. Etiam tempus dui vel velit. Phasellus nunc magna, pharetra eu, vehicula id, tristique at, nisi. Integer pretium, nibh ut pellentesque facilisis, velit leo facilisis nulla, at ultricies tortor enim id leo. Duis imperdiet tristique sem.
+
+Fusce feugiat mauris sed lectus. In nulla. Praesent bibendum felis ac nulla. Donec in arcu. Phasellus consequat magna nec purus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas neque dolor, ultrices nec, fermentum sed, egestas id, elit. Vestibulum porttitor, purus in laoreet consequat, nunc massa sagittis nibh, vitae aliquam elit turpis at nulla. In at erat sodales eros lobortis rutrum. Integer molestie lacus ut ipsum. Donec at leo. Sed a elit.
+
+Quisque augue neque, bibendum eu, vulputate ut, mattis ut, augue. Suspendisse vulputate ipsum at leo. Proin consequat, turpis a luctus vulputate, orci lectus vehicula sapien, nec molestie urna tortor sed diam. Donec in massa. Phasellus tristique quam ut nisl. Aliquam erat volutpat. Maecenas luctus elementum tortor. Curabitur mi. Aenean a arcu sed orci condimentum pulvinar. Aliquam quis sapien id pede scelerisque varius. Vivamus dolor. Curabitur elementum euismod nunc. Nulla facilisi. Quisque massa nulla, ultrices congue, dapibus ac, volutpat ut, nisl. Vestibulum elit est, rhoncus vitae, accumsan quis, facilisis quis, mi. Sed ultricies magna eget leo. Nullam ullamcorper vulputate massa.
+
+Morbi pharetra dictum orci. Morbi mattis luctus dui. Morbi elementum venenatis tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Fusce sodales dignissim elit. Morbi vel massa. Nulla facilisi. In elementum. Vivamus est. Sed lacinia neque vel lorem. Cras mollis. Sed congue porttitor turpis. Aliquam mi dolor, egestas eget, dignissim ac, cursus ac, nisi.
