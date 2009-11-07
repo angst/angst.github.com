@@ -5,7 +5,7 @@ title: Ang.st Blog
 
 <div id="home">
   <div id="posts">
-    {% for post in site.posts limit:5 %}
+    {% for post in site.posts %}
     <div class="post">
       <ul class="info">
         <li class="date">{{post.date | date: "%B %d %Y"}}</li>
@@ -13,10 +13,8 @@ title: Ang.st Blog
       </ul>
       <div class="content">
         <h2 class="title"><a href="{{ post.url }}">{{ post.title }}</a></h2>
-        {{ post.content }}
       </div>
     </div>
-    
     {% endfor %}
   </div>
   
