@@ -1,0 +1,59 @@
+---
+layout: post
+title: Installing Tornado on Snow Leopard
+byline: Jake Dahn
+---
+
+
+Tonight I had a semi-frustrating bout with attempting to get "Tornadoweb":http://tornadoweb.org to run on my macbook, which is running Snow Leopard 10.6.1 . There were a few things that were causing issues, but I finally figured out what was going on. The first issue I ran into was with py-curl installation via easy_install. The second issue was with openid authentication which needed SSL.
+
+
+h3. Looking for a fix
+
+As instructed on the tornadoweb site I ran:
+
+{% highlight text %}
+sudo easy_install setuptools pycurl==7.16.2.1 simplejson
+{% endhighlight %}
+
+However this threw out some nasty errors. So then I found that if I included a different env flag that it would install correctly.
+
+{% highlight text %}
+sudo env ARCHFLAGS="-arch x86_64" easy_install setuptools pycurl==7.16.2.1
+{% endhighlight %}
+
+After that was installed I was able to actually run the tornadoweb chat demo, but I was getting this error: 
+
+{% highlight text %}
+Invalid OpenID response: HTTP 599: Protocol https not supported or disabled in libcurl
+{% endhighlight %}
+
+So after some more digging I discovered that the issue was that my version of curl didn't support SSL. Apparently the default install via macports doesn't include the SSL flag, so I had to reinstall what I had seen below:
+
+{% highlight text %}
+sudo port uninstall py-curl
+sudo port uninstall curl
+sudo port clean curl
+sudo port install curl +ssl
+sudo port install py-curl
+{% endhighlight %}
+
+h3. Solution Summary
+
+If you're encountering the same issues, all you need to do is run the following items:
+
+{% highlight text %}
+
+sudo env ARCHFLAGS="-arch x86_64" easy_install setuptools pycurl==7.16.2.1
+
+sudo port uninstall py-curl
+sudo port uninstall curl
+sudo port clean curl
+sudo port install curl +ssl
+sudo port install py-curl
+{% endhighlight %}
+
+
+After these things were done, everything worked fine. Hopefully it's smooth sailing from here!
+
+
